@@ -1,4 +1,5 @@
 import "./App.css";
+
 import Dashboard from "./Screens/Dashborad";
 import Expense from "./Screens/Expense";
 import Income from "./Screens/Income";
@@ -11,16 +12,17 @@ import {
   Outlet,
   useNavigate,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+
+import Register from "./Screens/Register";
 
 function App() {
   const PrivateRoutes = () => {
     let auth = { token: false };
     console.log(localStorage.getItem("authToken"));
     if (
-      localStorage.getItem("authToken") != "" &&
-      localStorage.getItem("authToken") != null &&
-      localStorage.getItem("authToken") != undefined
+      localStorage.getItem("authToken") !== "" &&
+      localStorage.getItem("authToken") !== null &&
+      localStorage.getItem("authToken") !== undefined
     ) {
       auth.token = true;
     }
@@ -32,9 +34,9 @@ function App() {
     let auth = { token: false };
     console.log(localStorage.getItem("authToken"));
     if (
-      localStorage.getItem("authToken") != "" &&
-      localStorage.getItem("authToken") != null &&
-      localStorage.getItem("authToken") != undefined
+      localStorage.getItem("authToken") !== "" &&
+      localStorage.getItem("authToken") !== null &&
+      localStorage.getItem("authToken") !== undefined
     ) {
       auth.token = true;
     }
@@ -70,6 +72,7 @@ function App() {
 
           <Route element={<AuthenticatedRoutes/>}>
             <Route path="/login" element={<Auth />}></Route>
+            <Route path="/register" element={<Register />}></Route>
           </Route>
         </Routes>
       </Router>
