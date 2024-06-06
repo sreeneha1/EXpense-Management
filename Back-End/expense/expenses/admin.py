@@ -3,6 +3,6 @@ from expenses.models import expenses
 
 # Register your models here.
 class expensesAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('description','category','amount','created_at')
 
 admin.site.register(expenses,expensesAdmin)
