@@ -26,3 +26,18 @@ class expenseCRUD(APIView):
         expenses_object = expenses(description=description,category=category,amount=amount,created_at=date)
         expenses_object.save()
         return Response(ExpenseModelSerilizer(expenses_object).data)
+    
+    def put(self, request):
+        request_body = json.loads(request.body)
+        id = request_body["id"]
+        description = request_body["description"]
+        category = request_body["category"]
+        amount = request_body["amount"]
+        date = request_body['date']
+        expenses_object = expenses.objects.get(id=id)
+        expenses_object.description=description
+        expenses_object.category=category
+        expenses_object.amount=amount
+        expenses_object.date=date
+        expenses_object.save()
+        return Response(ExpenseModelSerilizer(expenses_object).data)
