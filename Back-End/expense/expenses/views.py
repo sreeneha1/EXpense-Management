@@ -17,4 +17,12 @@ class expenseCRUD(APIView):
         serialized_obj = ExpenseModelSerilizer(expenses_object,many=True)
         return Response(serialized_obj.data)
 
-    
+    def post(self, request):
+        request_body = json.loads(request.body)
+        description = request_body["description"]
+        category = request_body["category"]
+        amount = request_body["amount"]
+        date = request_body['date']
+        expenses_object = expenses(description=description,category=category,amount=amount,created_at=date)
+        expenses_object.save()
+        return Response(ExpenseModelSerilizer(expenses_object).data)
