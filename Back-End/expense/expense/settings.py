@@ -42,7 +42,7 @@ INSTALLED_APPS = [
         'rest_framework_simplejwt',
         'rest_framework',
         'userLogin.apps.UserloginConfig',
-        # 'expenses_and_income.apps.ExpensesAndIncomeConfig',
+        'expenses.apps.ExpensesConfig',
 ]
 
 MIDDLEWARE = [
