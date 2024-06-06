@@ -41,3 +41,11 @@ class expenseCRUD(APIView):
         expenses_object.date=date
         expenses_object.save()
         return Response(ExpenseModelSerilizer(expenses_object).data)
+
+    def delete (self, request):
+        request_body = json.loads(request.body)
+        id = request_body["id"]
+        expenses_object = expenses.objects.get(id=id)
+        expenses_object.delete()
+        return Response({"sucess":True})
+
