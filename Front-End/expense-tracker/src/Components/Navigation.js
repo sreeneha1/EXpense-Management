@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function Navigation() {
   return (
-    <div className="nav-bg text-white" style={{ minHeight: "100vh" }}>
+    <div className="nav-bg text-white" style={{ minHeight: "100vh"}}>
       <div className="title p-2" >
         {" "}
         ExpenseXpert

@@ -1,0 +1,17 @@
+.add-expense{
+    background-color: black;
+    color: white;
+    border-radius: 50px;
+    font-size: 20px;
+    padding: 10px;
+}
+th{
+    padding: 10px;
+}
+td{
+    padding: 10px;
+}
+
+tbody::before{
+    line-height: 10px;
+}
