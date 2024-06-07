@@ -19,7 +19,7 @@ function Navigation() {
         </div>
         <div className="nav-links">
           <Link to="/inventory" className="nav-item">
-          Inventory{""}
+          Inventory
           </Link>
         </div>
         <div className="nav-links">
