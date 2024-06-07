@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class expenses(models.Model):
@@ -35,3 +36,4 @@ class expenses(models.Model):
     category = models.IntegerField(choices=category_choice.choices)
     amount = models.IntegerField()
     created_at = models.DateField()
+    user = models.ForeignKey(User,on_delete=models.CASCADE, default=1)
