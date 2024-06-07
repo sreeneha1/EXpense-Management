@@ -1,38 +1,79 @@
-.hz-rule{
-    border: 1px solid #FFFFFF;
+/* navigation.css */
+
+.nav-bg {
+    background-color: #fff; /* White background */
+    color: #333; /* Dark gray text color */
+    min-height: 100vh; /* Full height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space between items */
+    padding: 20px; /* Padding for inner spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
-.nav-bg{
-    background-color:bisque;
+
+.title {
+    font-size: 2rem; /* Larger font size for the title */
+    text-align: center; /* Centered text */
+    padding: 20px 0; /* Padding for spacing */
+    background-color: #e64751; /* Light pink background for title */
+    border-radius: 10px; /* Rounded corners */
+    color: #333; /* Dark gray text color */
+    margin-bottom: 0; /* Remove bottom margin */
 }
-.profile-icon{
-    width:40px;
-    height: 40px;
-    border-radius: 20px;
-    background-color: #C5B3B3;
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0; /* Remove padding */
+    margin-top: 10px; /* Optional: Add a small margin to separate from title */
+}
+
+.nav-item {
+    font-size: 1.2rem; /* Font size for navigation items */
+    padding: 10px 20px;
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Dark gray text color */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+}
+
+.nav-item:hover {
+    background-color: #eb9594; /* Light pink background on hover */
+    color: #fff; /* White text color on hover */
+}
+
+.hz-rule {
+    border-top: 1px solid #ccc; /* Light gray horizontal rule */
+    margin: 20px 0;
+}
+
+.profile-icon {
+    background-color: #e64751; /* Pink background color */
+    border-radius: 50%; /* Circular shape */
+    color: white; /* White text color */
+    width: 40px; /* Width of the profile icon */
+    height: 40px; /* Height of the profile icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem; /* Font size for profile icon */
+    margin-right: 10px; /* Spacing on the right */
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff; /* White background for profile section */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: auto; /* Push profile section to the end */
+}
+
+.profile-text {
     text-align: center;
     padding-top: 5%;
-
-}
-
-.title{
-    font-size: 24px;
-    font-weight: bold;
-    font-style: italic;
-    text-align: center;
-    padding-top: 5vh;
-}
-.nav-links{
-    margin-top: 5%;
-    color: #FFFFFF;
-}
-.nav-links:hover{
-    
-    font-weight: 400 !important;
-}
-.nav-item{
-    color: #FFFFFF;
-    text-decoration: none;
-}
-.nav-item:hover{
-    text-decoration: underline;
+    width: 110px;
+    color: #0e0a0a; /* Dark gray text color */
 }
