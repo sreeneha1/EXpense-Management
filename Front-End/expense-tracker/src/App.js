@@ -18,7 +18,6 @@ import Register from "./Screens/Register";
 function App() {
   const PrivateRoutes = () => {
     let auth = { token: false };
-    console.log(localStorage.getItem("authToken"));
     if (
       localStorage.getItem("authToken") !== "" &&
       localStorage.getItem("authToken") !== null &&
@@ -32,7 +31,6 @@ function App() {
 
   const AuthenticatedRoutes = () => {
     let auth = { token: false };
-    console.log(localStorage.getItem("authToken"));
     if (
       localStorage.getItem("authToken") !== "" &&
       localStorage.getItem("authToken") !== null &&
