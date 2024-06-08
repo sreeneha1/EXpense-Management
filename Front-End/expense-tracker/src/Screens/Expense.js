@@ -12,10 +12,11 @@ function Expense() {
   let [expenses, setExpenses] = useState([]);
   let [newExpense, setNewExpense] = useState({
     description: "",
-    category: "",
+    category: 1,
     amount: 0,
     date: moment().format("YYYY-MM-DD"),
   });
+  // let [searchText,setSearchText] = useState("")
 
   useEffect(() => {
     fetch(localhost_backend + "expenses/expense", {
@@ -32,31 +33,10 @@ function Expense() {
         setExpenses(response);
       });
   }, []);
+
   // useEffect(()=>{
-  //     let table_row = document.getElementById("template")
-  //     let table_body = document.getElementById("table_body")
-  //     let response_rows = document.getElementsByClassName("res")
-  //     while(response_rows.length > 0) {
-  //       response_rows[0].parentNode.removeChild(response_rows[0]);
-  //   }
-  //   console.log(expenses)
-  //     for(let i = 0; i<expenses.length;i++){
-  //       let clone_node = table_row.cloneNode(true)
-  //     clone_node.id = ""
-  //     clone_node.classList.add("res")
-  //     clone_node.classList.remove("d-none")
-  //     clone_node.id = expenses[i]["id"]
-  //     clone_node.childNodes[0].innerHTML = expenses[i]["description"];
-  //     clone_node.childNodes[1].innerHTML = expenses_options[expenses[i]["category"]-1];
-  //     clone_node.childNodes[2].innerHTML = expenses[i]["created_at"];
-  //     clone_node.childNodes[3].innerHTML = '$ '+expenses[i]["amount"];
-  //     clone_node.childNodes[4].childNodes[0].name = expenses[i]["id"]
-  //     clone_node.childNodes[4].childNodes[1].name = expenses[i]["id"]
-  //     clone_node.childNodes[4].childNodes[1].addEventListener("click",() => deleteExpense(expenses[i]["id"]))
-  //     clone_node.childNodes[4].childNodes[0].addEventListener("click",() => editExpense(expenses[i]["id"]))
-  //     table_body.appendChild(clone_node)
-  //     }
-  // },[expenses])
+  //   expenses.filter
+  // },[searchText])
 
   const deleteExpense = (id) => {
     let data = JSON.stringify({
@@ -136,6 +116,8 @@ function Expense() {
                   type="search"
                   style={{ fontSize: "25px" }}
                   placeholder="Search by description"
+                  // onChange={(event)=> setSearchText(event.target.value)}
+                  // value={searchText}
                 />
               </div>
             </div>
