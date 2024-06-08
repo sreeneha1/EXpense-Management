@@ -10,18 +10,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 # Create your views here.
 
-# @csrf_exempt
-# @require_POST
-# def loginPage(request):
-#     request_body = json.loads(request.body)
-#     authenticated = authenticate(username = request_body['username'],password = request_body['password'])
-#     if authenticated:
-#         login(request,authenticated)
-#         return JsonResponse({"authenticated":True})
-#     else:
-#         return JsonResponse({"authenticated":False})
-
-
 @csrf_exempt
 @require_POST
 def register_user(request):

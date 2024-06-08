@@ -2,21 +2,24 @@ import React from "react";
 import "../styles/navigation.css";
 import { Link } from "react-router-dom";
 
+
 function Navigation() {
   return (
-    <div className="nav-bg text-white">
-      <div className="title">
-        Inventory & Expense Tracker!
+    <div className="nav-bg text-white" style={{ minHeight: "100vh"}}>
+      <div className="title p-2" >
+        {" "}
+        ExpenseXpert
+
       </div>
-      <div style={{ paddingLeft: "12%" }}>
+      <div style={{ paddingLeft: "12%", marginTop: "10%" }}>
         <div className="nav-links">
           <Link to="/" className="nav-item">
-            Dashboard
+            Dashboard{" "}
           </Link>
         </div>
         <div className="nav-links">
-          <Link to="/" className="nav-item">
-            Inventory
+          <Link to="/inventory" className="nav-item">
+          Inventory
           </Link>
         </div>
         <div className="nav-links">
@@ -30,13 +33,25 @@ function Navigation() {
           </Link>
         </div>
       </div>
-      <div className="profile-section">
+      <div
+        style={{
+          marginLeft: "17px",
+          marginRight: "17px",
+          position: "absolute",
+          bottom: "0",
+        }}
+      >
         <div className="hz-rule"></div>
-        <div className="d-flex mt-2 mb-2" style={{ paddingLeft: "30px", paddingRight: "30px" }}>
+        <div
+          className="d-flex mt-2 mb-2"
+          style={{ paddingLeft: "30px", paddingRight: "30px" }}
+        >
           <div className="profile-icon">IN</div>
-          <div style={{ textAlign: "center", paddingTop: "5%", width: "110px", color:"black" }}>
-              UserName
-           </div>
+          <div
+            style={{ textAlign: "center", paddingTop: "5%", width: "110px" }}
+          >
+            UserName
+          </div>
         </div>
       </div>
     </div>
