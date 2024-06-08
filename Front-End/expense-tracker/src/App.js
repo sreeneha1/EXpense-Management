@@ -69,7 +69,7 @@ function App() {
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/expense" element={<Expense />}></Route>
             <Route exact path="/income" element={<Income />}></Route>
-            <Route exact path="/inventory" element={<Inventory />}></Route>n
+            <Route exact path="/inventory" element={<Inventory />}></Route>
           </Route>
 
           <Route element={<AuthenticatedRoutes/>}>
