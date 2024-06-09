@@ -8,7 +8,7 @@ function Navigation() {
     <div className="nav-bg text-white" style={{ minHeight: "100vh"}}>
       <div className="title p-2" >
         {" "}
-        ExpenseXpert
+        Expense Tracker
 
       </div>
       <div style={{ paddingLeft: "12%", marginTop: "10%" }}>
