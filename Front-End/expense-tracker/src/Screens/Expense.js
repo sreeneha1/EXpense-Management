@@ -10,13 +10,14 @@ import ExpenseTableRow from "../Components/ExpenseTableRow";
 
 function Expense() {
   let [expenses, setExpenses] = useState([]);
+  let [unfilteredExpenses,setUnfilteredExpenses] = useState([])
   let [newExpense, setNewExpense] = useState({
     description: "",
     category: 1,
     amount: 0,
     date: moment().format("YYYY-MM-DD"),
   });
-  // let [searchText,setSearchText] = useState("")
+  let [searchText,setSearchText] = useState("")
 
   useEffect(() => {
     fetch(localhost_backend + "expenses/expense", {
@@ -30,13 +31,15 @@ function Expense() {
         }
       })
       .then((response) => {
-        setExpenses(response);
+        // setExpenses(response);
+        setUnfilteredExpenses(response)
       });
   }, []);
 
-  // useEffect(()=>{
-  //   expenses.filter
-  // },[searchText])
+
+  useEffect(()=>{
+    setExpenses(unfilteredExpenses.filter((i)=> i.description.includes(searchText)))
+  },[unfilteredExpenses,searchText])
 
   const deleteExpense = (id) => {
     let data = JSON.stringify({
@@ -55,7 +58,7 @@ function Expense() {
         }
       })
       .then((response) => {
-        setExpenses(response);
+        setUnfilteredExpenses(response);
       });
   };
   const addExpense = () => {
@@ -72,7 +75,7 @@ function Expense() {
         }
       })
       .then((response) => {
-        setExpenses([...expenses, response]);
+        setUnfilteredExpenses([...expenses, response]);
         setNewExpense({
           description: "",
           category: "",
@@ -84,7 +87,7 @@ function Expense() {
 
   const editExpense = (expenseState) => {
     console.log(expenseState)
-    expenses.map((i)=>{
+    unfilteredExpenses.map((i)=>{
       if(i.id == expenseState.id){
         i.description = expenseState.description
         i.category = expenseState.category
@@ -101,9 +104,11 @@ function Expense() {
       body: JSON.stringify(expenseState),
     })
   };
+
   
   return (
     <>
+    {console.log(unfilteredExpenses, expenses)}
       <div className="d-flex">
         <div className="navigation">
           <Navigation />
@@ -116,8 +121,8 @@ function Expense() {
                   type="search"
                   style={{ fontSize: "25px" }}
                   placeholder="Search by description"
-                  // onChange={(event)=> setSearchText(event.target.value)}
-                  // value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)                  }
+                  value={searchText}
                 />
               </div>
             </div>
