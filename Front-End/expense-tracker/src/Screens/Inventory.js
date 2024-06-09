@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../Components/Navigation"; // Ensure the correct path to Navigation component
+import { Modal, Button } from "react-bootstrap"; // Import react-bootstrap components
+import "../styles/inventory.css"; // Import custom CSS
 
 function Inventory() {
   const [price, setPrice] = useState(0);
@@ -10,6 +12,10 @@ function Inventory() {
   const [lowStockAlert, setLowStockAlert] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     setTotal(price * qty);
@@ -35,10 +41,33 @@ function Inventory() {
 
   function addToInventory() {
     const newProduct = { name, price, qty, sum: price * qty };
-    setUsers([...users, newProduct]);
+    if (isEditing) {
+      const updatedUsers = users.map((product, index) =>
+        index === editingIndex ? newProduct : product
+      );
+      setUsers(updatedUsers);
+      setIsEditing(false);
+      setEditingIndex(null);
+    } else {
+      setUsers([...users, newProduct]);
+    }
     setName("");
     setQty(0);
     setPrice(0);
+  }
+
+  function handleEdit(index) {
+    const product = users[index];
+    setName(product.name);
+    setPrice(product.price);
+    setQty(product.qty);
+    setIsEditing(true);
+    setEditingIndex(index);
+  }
+
+  function handleDelete(index) {
+    const updatedUsers = users.filter((_, i) => i !== index);
+    setUsers(updatedUsers);
   }
 
   function checkLowStock() {
@@ -52,7 +81,8 @@ function Inventory() {
   }
 
   function refreshPage() {
-    window.location.reload();
+    setUsers([]);
+    setLowStockAlert("");
   }
 
   function handleSearchChange(e) {
@@ -71,39 +101,44 @@ function Inventory() {
     });
   }
 
+  function handleShowModal(product) {
+    setSelectedProduct(product);
+    setShowModal(true);
+  }
+
   const filteredUsers = filterProducts(users);
 
   return (
-      <div style={{ display: "flex" }}>
-        <div className="navigation">
-          <Navigation />
-        </div>
-        <div className="container-fluid" style={{ marginLeft: "250px", marginTop: "20px" }}>
-          <h1 className="text-center mb-4">Inventory Management System</h1>
-          <div className="row">
-            <div className="col-lg-8">
-              <div className="card mb-4">
-                <div className="card-header">Add Products</div>
-                <div className="card-body">
-                  <table className="table table-bordered">
-                    <tbody>
+    <div className="inventory">
+      <div className="navigation">
+        <Navigation />
+      </div>
+      <div className="inventory-container container-fluid">
+        <h1 className="text-center mb-4">Inventory Management System</h1>
+        <div className="row justify-content-center">
+          <div className="col-lg-10">
+            <div className="card mb-4">
+              <div className="card-header">Add Products</div>
+              <div className="card-body">
+                <table className="table table-bordered">
+                  <tbody>
                     <tr>
                       <td>Item Name:</td>
                       <td>
                         <input
-                            type="text"
-                            className="form-control"
-                            value={name}
-                            onChange={(event) => setName(event.target.value)}
+                          type="text"
+                          className="form-control"
+                          value={name}
+                          onChange={(event) => setName(event.target.value)}
                         />
                       </td>
                       <td>Price:</td>
                       <td>
                         <input
-                            type="text"
-                            className="form-control"
-                            value={price}
-                            onChange={handlePriceChange}
+                          type="text"
+                          className="form-control"
+                          value={price}
+                          onChange={handlePriceChange}
                         />
                       </td>
                     </tr>
@@ -111,111 +146,113 @@ function Inventory() {
                       <td>Quantity:</td>
                       <td>
                         <input
-                            type="number"
-                            className="form-control"
-                            value={qty}
-                            onChange={handleQuantityChange}
+                          type="number"
+                          className="form-control"
+                          value={qty}
+                          onChange={handleQuantityChange}
                         />
                       </td>
                       <td>Total:</td>
                       <td>
                         <input
-                            type="text"
-                            className="form-control"
-                            disabled
-                            value={total}
+                          type="text"
+                          className="form-control"
+                          disabled
+                          value={total}
                         />
                       </td>
                     </tr>
                     <tr>
-                      <td colSpan="4">
-                        <button className="btn btn-success" type="button" onClick={addToInventory}>
-                          Add
+                      <td colSpan="4" className="text-center">
+                        <button className="btn btn-add" type="button" onClick={addToInventory}>
+                          {isEditing ? "Update" : "Add"}
                         </button>
                       </td>
                     </tr>
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
-              {lowStockAlert && (
-                  <div className="alert alert-warning">
-                    {lowStockAlert}
-                  </div>
-              )}
-              <div className="card mb-4">
-                <div className="card-header">Products</div>
-                <div className="card-body">
-                  <table className="table table-bordered">
-                    <thead>
-                    <tr>
-                      <th colSpan="2">Search and Filter</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search by name"
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                        />
-                      </td>
-                      <td>
-                        <select className="form-control" value={filter} onChange={handleFilterChange}>
-                          <option value="all">All</option>
-                          <option value="lowStock">Low Stock</option>
-                        </select>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <table className="table table-bordered">
-                    <thead>
+            </div>
+            {lowStockAlert && (
+              <div className="alert alert-warning">
+                {lowStockAlert}
+              </div>
+            )}
+            <div className="card mb-4">
+              <div className="card-header">Products</div>
+              <div className="card-body">
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by name"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <select className="form-control" value={filter} onChange={handleFilterChange}>
+                    <option value="all">All</option>
+                    <option value="lowStock">Low Stock</option>
+                  </select>
+                </div>
+                <table className="table table-bordered">
+                  <thead>
                     <tr>
                       <th>Item Name</th>
                       <th>Price</th>
                       <th>Qty</th>
                       <th>Amount</th>
+                      <th>Actions</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                  </thead>
+                  <tbody>
                     {filteredUsers.map((row, index) => (
-                        <tr key={index}>
-                          <td>{row.name}</td>
-                          <td>{row.price}</td>
-                          <td>{row.qty}</td>
-                          <td>{row.sum}</td>
-                        </tr>
+                      <tr key={index}>
+                        <td>
+                          <span
+                            className="product-name"
+                            onClick={() => handleShowModal(row)}
+                            style={{ cursor: "pointer", color: "blue" }}
+                          >
+                            {row.name}
+                          </span>
+                        </td>
+                        <td>{row.price}</td>
+                        <td>{row.qty}</td>
+                        <td>{row.sum}</td>
+                        <td>
+                          <button className="btn btn-primary btn-spacing" onClick={() => handleEdit(index)}>Edit</button>
+                          <button className="btn btn-danger btn-spacing" onClick={() => handleDelete(index)}>Delete</button>
+                        </td>
+                      </tr>
                     ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4">
-              <div className="card">
-                <div className="card-header">Total</div>
-                <div className="card-body">
-                  <input
-                      type="text"
-                      className="form-control mb-3"
-                      placeholder="Enter Total"
-                      required
-                      disabled
-                      value={users.reduce((total, user) => total + user.sum, 0)}
-                  />
-                  <button type="button" className="btn btn-success btn-block" onClick={refreshPage}>
-                    Clear Inventory
-                  </button>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {selectedProduct && (
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Product Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p><strong>Name:</strong> {selectedProduct.name}</p>
+            <p><strong>Price:</strong> ${selectedProduct.price}</p>
+            <p><strong>Quantity:</strong> {selectedProduct.qty}</p>
+            <p><strong>Total:</strong> ${selectedProduct.sum}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+    </div>
   );
 }
 
