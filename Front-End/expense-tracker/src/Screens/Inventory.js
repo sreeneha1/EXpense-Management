@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Navigation from "../Components/Navigation"; // Ensure the correct path to Navigation component
+import Navigation from "../Components/Navigation";
+import { fetchProducts, addProduct, updateProduct, deleteProduct } from "./api";
 
 function Inventory() {
   const [price, setPrice] = useState(0);
   const [qty, setQty] = useState(0);
-  const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [total, setTotal] = useState(0);
   const [lowStockAlert, setLowStockAlert] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
-  const [editIndex, setEditIndex] = useState(-1);
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  useEffect(() => {
+    fetchProductsFromApi();
+  }, []);
 
   useEffect(() => {
     setTotal(price * qty);
@@ -18,75 +23,100 @@ function Inventory() {
 
   useEffect(() => {
     checkLowStock();
-  }, [users]);
+  }, [products]);
 
-  function handlePriceChange(e) {
+  const fetchProductsFromApi = async () => {
+    try {
+      const products = await fetchProducts();
+      setProducts(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handlePriceChange = (e) => {
     const newPrice = parseFloat(e.target.value);
     if (!isNaN(newPrice)) {
       setPrice(newPrice);
     }
-  }
+  };
 
-  function handleQuantityChange(e) {
+  const handleQuantityChange = (e) => {
     const newQuantity = parseInt(e.target.value);
     if (!isNaN(newQuantity)) {
       setQty(newQuantity);
     }
-  }
+  };
 
-  function addToInventory() {
-    if (editIndex === -1) {
-      const newProduct = { name, price, qty, sum: price * qty };
-      setUsers([...users, newProduct]);
+  const addOrUpdateProduct = async () => {
+    if (editingProduct) {
+      updateProductInApi();
     } else {
-      const updatedUsers = [...users];
-      updatedUsers[editIndex] = { name, price, qty, sum: price * qty };
-      setUsers(updatedUsers);
-      setEditIndex(-1);
+      addProductToApi();
     }
+  };
+
+  const addProductToApi = async () => {
+    const newProduct = { name, price, qty };
+    try {
+      const response = await addProduct(newProduct);
+      setProducts([...products, response]);
+      resetForm();
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  };
+
+  const updateProductInApi = async () => {
+    try {
+      const response = await updateProduct({ id: editingProduct.id, name, price, qty });
+      const updatedProducts = products.map((product) =>
+          product.id === editingProduct.id ? response : product
+      );
+      setProducts(updatedProducts);
+      resetForm();
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const deleteProductFromApi = async (id) => {
+    try {
+      await deleteProduct(id);
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  const resetForm = () => {
     setName("");
-    setQty(0);
     setPrice(0);
-  }
+    setQty(0);
+    setEditingProduct(null);
+  };
 
-  function editProduct(index) {
-    const product = users[index];
-    setName(product.name);
-    setPrice(product.price);
-    setQty(product.qty);
-    setEditIndex(index);
-  }
-
-  function deleteProduct(index) {
-    const updatedUsers = [...users];
-    updatedUsers.splice(index, 1);
-    setUsers(updatedUsers);
-  }
-
-  function checkLowStock() {
-    const lowStockItems = users.filter(product => product.qty < 5);
+  const checkLowStock = () => {
+    const lowStockItems = products.filter((product) => product.qty < 5);
     if (lowStockItems.length > 0) {
-      const itemNames = lowStockItems.map(item => item.name).join(", ");
+      const itemNames = lowStockItems.map((item) => item.name).join(", ");
       setLowStockAlert(`Low stock alert: ${itemNames} has less than 5 units!`);
     } else {
-      setLowStockAlert(""); // Clear the alert if no low stock items
+      setLowStockAlert("");
     }
-  }
+  };
 
-  function refreshPage() {
-    window.location.reload();
-  }
-
-  function handleSearchChange(e) {
+  const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-  }
+  };
 
-  function handleFilterChange(e) {
+  const handleFilterChange = (e) => {
     setFilter(e.target.value);
-  }
+  };
 
-  function filterProducts(products) {
-    return products.filter(product => {
+  const filterProducts = (products) => {
+    return products.filter((product) => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
       if (filter === "all") {
         return matchesSearch;
@@ -95,13 +125,20 @@ function Inventory() {
       }
       return true;
     });
-  }
+  };
 
-  const filteredUsers = filterProducts(users);
+  const startEditingProduct = (product) => {
+    setName(product.name);
+    setPrice(product.price);
+    setQty(product.qty);
+    setEditingProduct(product);
+  };
+
+  const filteredProducts = filterProducts(products);
 
   return (
-      <div className="d-flex">
-        <div className="flex-shrink-0">
+      <div style={{ display: "flex" }}>
+        <div className="navigation">
           <Navigation />
         </div>
         <div className="container-fluid" style={{ marginLeft: "250px", marginTop: "20px" }}>
@@ -143,11 +180,15 @@ function Inventory() {
                             onChange={handleQuantityChange}
                         />
                       </td>
+                      <td>Total:</td>
+                      <td>
+                        <input type="text" className="form-control" disabled value={total} />
+                      </td>
                     </tr>
                     <tr>
                       <td colSpan="4">
-                        <button className="btn btn-success" type="button" onClick={addToInventory}>
-                          {editIndex === -1 ? "Add" : "Update"}
+                        <button className="btn btn-success" type="button" onClick={addOrUpdateProduct}>
+                          {editingProduct ? "Update" : "Add"}
                         </button>
                       </td>
                     </tr>
@@ -155,15 +196,11 @@ function Inventory() {
                   </table>
                 </div>
               </div>
-              {lowStockAlert && (
-                  <div className="alert alert-warning">
-                    {lowStockAlert}
-                  </div>
-              )}
+              {lowStockAlert && <div className="alert alert-warning">{lowStockAlert}</div>}
               <div className="card mb-4">
                 <div className="card-header">Products</div>
                 <div className="card-body">
-                  <table className="table table-bordered mb-4">
+                  <table className="table table-bordered">
                     <thead>
                     <tr>
                       <th colSpan="2">Search and Filter</th>
@@ -200,15 +237,19 @@ function Inventory() {
                     </tr>
                     </thead>
                     <tbody>
-                    {filteredUsers.map((row, index) => (
-                        <tr key={index}>
+                    {filteredProducts.map((row) => (
+                        <tr key={row.id}>
                           <td>{row.name}</td>
                           <td>{row.price}</td>
                           <td>{row.qty}</td>
                           <td>{row.sum}</td>
                           <td>
-                            <button className="btn btn-primary mr-2" onClick={() => editProduct(index)}>Edit</button>
-                            <button className="btn btn-danger" onClick={() => deleteProduct(index)}>Delete</button>
+                            <button className="btn btn-primary" onClick={() => startEditingProduct(row)}>
+                              Edit
+                            </button>
+                            <button className="btn btn-danger" onClick={() => deleteProductFromApi(row.id)}>
+                              Delete
+                            </button>
                           </td>
                         </tr>
                     ))}
