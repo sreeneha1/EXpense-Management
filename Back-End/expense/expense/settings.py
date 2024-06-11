@@ -43,6 +43,7 @@ INSTALLED_APPS = [
         'rest_framework',
         'userLogin.apps.UserloginConfig',
         'expenses.apps.ExpensesConfig',
+        'inventory.apps.InventoryConfig'
 ]
 
 MIDDLEWARE = [
