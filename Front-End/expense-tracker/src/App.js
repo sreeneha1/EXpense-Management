@@ -4,6 +4,7 @@ import Dashboard from "./Screens/Dashborad";
 import Expense from "./Screens/Expense";
 import Income from "./Screens/Income";
 import Auth from "./Screens/Auth";
+import Inventory from "./Screens/Inventory";
 import {
   BrowserRouter as Router,
   Routes,
@@ -66,6 +67,7 @@ function App() {
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/expense" element={<Expense />}></Route>
             <Route exact path="/income" element={<Income />}></Route>
+            <Route exact path="/inventory" element={<Inventory />}></Route>
           </Route>
 
           <Route element={<AuthenticatedRoutes/>}>
