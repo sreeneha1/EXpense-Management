@@ -1,150 +1,267 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Navigation from "../Components/Navigation";
+import { fetchProducts, addProduct, updateProduct, deleteProduct } from "./api";
 
 function Inventory() {
   const [price, setPrice] = useState(0);
   const [qty, setQty] = useState(0);
-  const [users, setUsers] = useState([]);
-  const [name, setName] = useState(""); // Ensured name starts as an empty string
+  const [products, setProducts] = useState([]);
+  const [name, setName] = useState("");
+  const [total, setTotal] = useState(0);
+  const [lowStockAlert, setLowStockAlert] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [editingProduct, setEditingProduct] = useState(null);
 
-  function calculateTotal() {
-    const newTotal = price * qty;
-    setSum(newTotal);
-  }
+  useEffect(() => {
+    fetchProductsFromApi();
+  }, []);
 
-  function handlePriceChange(e) {
+  useEffect(() => {
+    setTotal(price * qty);
+  }, [price, qty]);
+
+  useEffect(() => {
+    checkLowStock();
+  }, [products]);
+
+  const fetchProductsFromApi = async () => {
+    try {
+      const products = await fetchProducts();
+      setProducts(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handlePriceChange = (e) => {
     const newPrice = parseFloat(e.target.value);
     if (!isNaN(newPrice)) {
       setPrice(newPrice);
-      calculateTotal(); // Recalculate total on price change
     }
-  }
+  };
 
-  function handleQuantityChange(e) {
+  const handleQuantityChange = (e) => {
     const newQuantity = parseInt(e.target.value);
     if (!isNaN(newQuantity)) {
       setQty(newQuantity);
-      calculateTotal(); // Recalculate total on quantity change
     }
-  }
+  };
 
-  function addToInventory() {
-    const newProduct = { name, price, qty, sum: price * qty };
-    setUsers([...users, newProduct]); // Added spread operator for immutable update
-    setName(""); // Clear name input after adding
-    setQty(0); // Clear qty input after adding
-    setPrice(0); // Clear price input after adding
-  }
+  const addOrUpdateProduct = async () => {
+    if (editingProduct) {
+      updateProductInApi();
+    } else {
+      addProductToApi();
+    }
+  };
 
-  function refreshPage() {
-    window.location.reload(); // Reload the entire page (not ideal)
-  }
+  const addProductToApi = async () => {
+    const newProduct = { name, price, qty };
+    try {
+      const response = await addProduct(newProduct);
+      setProducts([...products, response]);
+      resetForm();
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  };
+
+  const updateProductInApi = async () => {
+    try {
+      const response = await updateProduct({ id: editingProduct.id, name, price, qty });
+      const updatedProducts = products.map((product) =>
+          product.id === editingProduct.id ? response : product
+      );
+      setProducts(updatedProducts);
+      resetForm();
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const deleteProductFromApi = async (id) => {
+    try {
+      await deleteProduct(id);
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  const resetForm = () => {
+    setName("");
+    setPrice(0);
+    setQty(0);
+    setEditingProduct(null);
+  };
+
+  const checkLowStock = () => {
+    const lowStockItems = products.filter((product) => product.qty < 5);
+    if (lowStockItems.length > 0) {
+      const itemNames = lowStockItems.map((item) => item.name).join(", ");
+      setLowStockAlert(`Low stock alert: ${itemNames} has less than 5 units!`);
+    } else {
+      setLowStockAlert("");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const filterProducts = (products) => {
+    return products.filter((product) => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      if (filter === "all") {
+        return matchesSearch;
+      } else if (filter === "lowStock") {
+        return matchesSearch && product.qty < 5;
+      }
+      return true;
+    });
+  };
+
+  const startEditingProduct = (product) => {
+    setName(product.name);
+    setPrice(product.price);
+    setQty(product.qty);
+    setEditingProduct(product);
+  };
+
+  const filteredProducts = filterProducts(products);
 
   return (
-    <div className="container-fluid bg-2 text-center">
-      <h1>Inventory Management System React</h1>
-      <br />
-      <div className="row">
-        <div className="col-sm-8">
-          <table className="table table-bordered">
-            <h3>Add Products</h3>
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Amount</th>
-                <th>Option</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Item Name"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Price"
-                    value={price}
-                    onChange={handlePriceChange}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Enter Qty"
-                    value={qty}
-                    onChange={handleQuantityChange}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Total"
-                    id="total_cost"
-                    name="total_cost"
-                    disabled
-                    value={sum}
-                  />
-                </td>
-                <td>
-                  <button className="btn btn-success" type="button" onClick={addToInventory}>
-                    Add
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h3>Products</h3>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Item Name</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((row, index) => (
-                <tr key={index}>
-                  <td>{row.name}</td>
-                  <td>{row.price}</td>
-                  <td>{row.qty}</td>
-                  <td>{row.sum}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div style={{ display: "flex" }}>
+        <div className="navigation">
+          <Navigation />
         </div>
-        <div className="col-sm-4">
-          <div className="form-group" align="left">
-            <h3>Total</h3>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Total"
-              required
-              disabled
-              value={users.reduce((total, user) => total + user.sum, 0)} // Calculate total from users array
-            />
-            <br />
-            <button type="button" className="btn btn-success" onClick={refreshPage}>
-              <span>Clear Inventory</span>
-            </button>  {/* Improved button text */}
+        <div className="container-fluid" style={{ marginLeft: "250px", marginTop: "20px" }}>
+          <h1 className="text-center mb-4">Inventory Management System</h1>
+          <div className="row">
+            <div className="col-lg-8">
+              <div className="card mb-4">
+                <div className="card-header">Add Products</div>
+                <div className="card-body">
+                  <table className="table table-bordered">
+                    <tbody>
+                    <tr>
+                      <td>Item Name:</td>
+                      <td>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                        />
+                      </td>
+                      <td>Price:</td>
+                      <td>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={price}
+                            onChange={handlePriceChange}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Quantity:</td>
+                      <td>
+                        <input
+                            type="number"
+                            className="form-control"
+                            value={qty}
+                            onChange={handleQuantityChange}
+                        />
+                      </td>
+                      <td>Total:</td>
+                      <td>
+                        <input type="text" className="form-control" disabled value={total} />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan="4">
+                        <button className="btn btn-success" type="button" onClick={addOrUpdateProduct}>
+                          {editingProduct ? "Update" : "Add"}
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {lowStockAlert && <div className="alert alert-warning">{lowStockAlert}</div>}
+              <div className="card mb-4">
+                <div className="card-header">Products</div>
+                <div className="card-body">
+                  <table className="table table-bordered">
+                    <thead>
+                    <tr>
+                      <th colSpan="2">Search and Filter</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search by name"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
+                      </td>
+                      <td>
+                        <select className="form-control" value={filter} onChange={handleFilterChange}>
+                          <option value="all">All</option>
+                          <option value="lowStock">Low Stock</option>
+                        </select>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <table className="table table-bordered">
+                    <thead>
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Price</th>
+                      <th>Qty</th>
+                      <th>Amount</th>
+                      <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {filteredProducts.map((row) => (
+                        <tr key={row.id}>
+                          <td>{row.name}</td>
+                          <td>{row.price}</td>
+                          <td>{row.qty}</td>
+                          <td>{row.sum}</td>
+                          <td>
+                            <button className="btn btn-primary" onClick={() => startEditingProduct(row)}>
+                              Edit
+                            </button>
+                            <button className="btn btn-danger" onClick={() => deleteProductFromApi(row.id)}>
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+  );
 }
-export default Inventory
+
+export default Inventory;
