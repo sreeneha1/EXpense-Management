@@ -51,6 +51,8 @@ class expenseCRUD(APIView):
         expenses_object = expenses.objects.get(id=id)
         if expenses_object.user == request.user:
             expenses_object.delete()
-            return Response({"sucess":True})
+            expenses_object = expenses.objects.filter(user = request.user)
+            serialized_obj = ExpenseModelSerilizer(expenses_object,many=True)
+            return Response(serialized_obj.data)
         return Response({"message":"unathorized user"},status=status.HTTP_401_UNAUTHORIZED)
 
