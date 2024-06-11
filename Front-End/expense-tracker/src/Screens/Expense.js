@@ -49,6 +49,7 @@ function Expense() {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
       },
       body: data,
     })
@@ -66,6 +67,8 @@ function Expense() {
       method: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
+
       },
       body: JSON.stringify(newExpense),
     })
@@ -100,6 +103,7 @@ function Expense() {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
       },
       body: JSON.stringify(expenseState),
     })

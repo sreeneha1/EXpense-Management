@@ -4,14 +4,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from expenses.models import expenses
 from expenses.serializers import ExpenseModelSerilizer
-import json
 from rest_framework import status
+from rest_framework.parsers import JSONParser
+
 
 
 # Create your views here.
 class expenseCRUD(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser]
+
 
     def get(self, request):
         expenses_object = expenses.objects.filter(user = request.user)
