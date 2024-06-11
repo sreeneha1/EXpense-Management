@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class expenses(models.Model):
     class category_choice(models.IntegerChoices):
-            franchising = 1 , "franchising"
+            franchising = 1 , "Franchising"
             rental_and_leasing = 2 , "Rental and leasing"
             online_shop = 3 , "Online shop"
             wholesale = 4 , "Wholesale"
