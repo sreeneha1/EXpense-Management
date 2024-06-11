@@ -14,12 +14,10 @@ import {
 } from "react-router-dom";
 
 import Register from "./Screens/Register";
-import Inventory from "./Screens/Inventory";
 
 function App() {
   const PrivateRoutes = () => {
     let auth = { token: false };
-    console.log(localStorage.getItem("authToken"));
     if (
       localStorage.getItem("authToken") !== "" &&
       localStorage.getItem("authToken") !== null &&
@@ -33,7 +31,6 @@ function App() {
 
   const AuthenticatedRoutes = () => {
     let auth = { token: false };
-    console.log(localStorage.getItem("authToken"));
     if (
       localStorage.getItem("authToken") !== "" &&
       localStorage.getItem("authToken") !== null &&
@@ -69,7 +66,6 @@ function App() {
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/expense" element={<Expense />}></Route>
             <Route exact path="/income" element={<Income />}></Route>
-            <Route exact path="/inventory" element={<Inventory />}></Route>
           </Route>
 
           <Route element={<AuthenticatedRoutes/>}>
