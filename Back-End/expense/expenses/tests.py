@@ -1,10 +1,8 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from expenses.models import expenses
-import json
 
 
 # Create your tests here.
@@ -43,7 +41,7 @@ class ExpensesTestCase(APITestCase):
          self.assertEqual(response.data["description"],"test2")
      
      def test_put_expenses(self):
-         response = self.client.post(reverse("expenses"), {
+         response = self.client.put(reverse("expenses"), {
              "id":1,
              "description":"test1changed",
              "category":2,
