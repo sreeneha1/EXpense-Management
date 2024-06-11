@@ -19,7 +19,7 @@ class expenseCRUD(APIView):
         return Response(serialized_obj.data)
 
     def post(self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         description = request_body["description"]
         category = request_body["category"]
         amount = request_body["amount"]
@@ -29,7 +29,7 @@ class expenseCRUD(APIView):
         return Response(ExpenseModelSerilizer(expenses_object).data)
     
     def put(self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         id = request_body["id"]
         description = request_body["description"]
         category = request_body["category"]
@@ -46,7 +46,7 @@ class expenseCRUD(APIView):
         return Response({"message":"unathorized user"},status=status.HTTP_401_UNAUTHORIZED)
 
     def delete (self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         id = request_body["id"]
         expenses_object = expenses.objects.get(id=id)
         if expenses_object.user == request.user:
