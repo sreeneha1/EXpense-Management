@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../Components/Navigation";
 import { fetchProducts, addProduct, updateProduct, deleteProduct } from "./api";
+import "../styles/inventory.css";
 
 function Inventory() {
   const [price, setPrice] = useState(0);
@@ -71,7 +72,7 @@ function Inventory() {
     try {
       const response = await updateProduct({ id: editingProduct.id, name, price, qty });
       const updatedProducts = products.map((product) =>
-          product.id === editingProduct.id ? response : product
+        product.id === editingProduct.id ? response : product
       );
       setProducts(updatedProducts);
       resetForm();
@@ -137,130 +138,118 @@ function Inventory() {
   const filteredProducts = filterProducts(products);
 
   return (
-      <div style={{ display: "flex" }}>
-        <div className="navigation">
-          <Navigation />
+    <div className="inventory-container">
+      <div className="navigation">
+        <Navigation />
+      </div>
+      <div className="content">
+        <h1 className="animated-inventory"><b>INVENTORY</b></h1>
+        <div className="card mb-4">
+          <div className="card-header">Add Products</div>
+          <div className="card-body">
+            <table className="table table-bordered">
+              <tbody>
+                <tr>
+                  <td>Item Name:</td>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                    />
+                  </td>
+                  <td>Price:</td>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={price}
+                      onChange={handlePriceChange}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Quantity:</td>
+                  <td>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={qty}
+                      onChange={handleQuantityChange}
+                    />
+                  </td>
+                  <td>Total:</td>
+                  <td>
+                    <input type="text" className="form-control" disabled value={total} />
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="4">
+                    <button className="btn btn-success" type="button" onClick={addOrUpdateProduct}>
+                      {editingProduct ? "Update" : "Add"}
+                    </button>
+                    <button className="btn btn-secondary ml-2" type="button" onClick={resetForm}>
+                      Clear
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className="container-fluid" style={{ marginLeft: "250px", marginTop: "20px" }}>
-          <h1 className="text-center mb-4">Inventory Management System</h1>
-          <div className="row">
-            <div className="col-lg-8">
-              <div className="card mb-4">
-                <div className="card-header">Add Products</div>
-                <div className="card-body">
-                  <table className="table table-bordered">
-                    <tbody>
-                    <tr>
-                      <td>Item Name:</td>
-                      <td>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={name}
-                            onChange={(event) => setName(event.target.value)}
-                        />
-                      </td>
-                      <td>Price:</td>
-                      <td>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={price}
-                            onChange={handlePriceChange}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Quantity:</td>
-                      <td>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={qty}
-                            onChange={handleQuantityChange}
-                        />
-                      </td>
-                      <td>Total:</td>
-                      <td>
-                        <input type="text" className="form-control" disabled value={total} />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="4">
-                        <button className="btn btn-success" type="button" onClick={addOrUpdateProduct}>
-                          {editingProduct ? "Update" : "Add"}
-                        </button>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              {lowStockAlert && <div className="alert alert-warning">{lowStockAlert}</div>}
-              <div className="card mb-4">
-                <div className="card-header">Products</div>
-                <div className="card-body">
-                  <table className="table table-bordered">
-                    <thead>
-                    <tr>
-                      <th colSpan="2">Search and Filter</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search by name"
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                        />
-                      </td>
-                      <td>
-                        <select className="form-control" value={filter} onChange={handleFilterChange}>
-                          <option value="all">All</option>
-                          <option value="lowStock">Low Stock</option>
-                        </select>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <table className="table table-bordered">
-                    <thead>
-                    <tr>
-                      <th>Item Name</th>
-                      <th>Price</th>
-                      <th>Qty</th>
-                      <th>Amount</th>
-                      <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredProducts.map((row) => (
-                        <tr key={row.id}>
-                          <td>{row.name}</td>
-                          <td>{row.price}</td>
-                          <td>{row.qty}</td>
-                          <td>{row.sum}</td>
-                          <td>
-                            <button className="btn btn-primary" onClick={() => startEditingProduct(row)}>
-                              Edit
-                            </button>
-                            <button className="btn btn-danger" onClick={() => deleteProductFromApi(row.id)}>
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+        {lowStockAlert && <div className="alert alert-warning">{lowStockAlert}</div>}
+        <div className="card">
+          <div className="card-header">Products</div>
+          <div className="card-body">
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by name"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
             </div>
+            <div className="mb-3">
+              <select className="form-control" value={filter} onChange={handleFilterChange}>
+                <option value="all">All</option>
+                <option value="lowStock">Low Stock</option>
+              </select>
+            </div>
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.price}</td>
+                    <td>{product.qty}</td>
+                    <td>{product.price * product.qty}</td>
+                    <td>
+                      <button className="btn btn-primary btn-spacing" onClick={() => startEditingProduct(product)}>
+                        Edit
+                      </button>
+                      <button className="btn btn-danger" onClick={() => deleteProductFromApi(product.id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 
