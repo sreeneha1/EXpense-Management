@@ -1,17 +1,74 @@
-.add-expense{
+/* Remove the gray line under the username */
+.username {
+    border: none; /* Remove border */
+    text-decoration: none; /* Remove underline */
+    outline: none; /* Remove outline */
+}
+
+/* Define the nude pink color */
+:root {
+    --nude-pink: rgb(255, 216, 159) !important;
+}
+
+/* Apply the nude pink color to the table headers */
+table thead th {
+    background-color: var(--nude-pink);
+    padding: 10px; /* Ensure padding for better spacing */
+}
+
+/* Ensure padding for table cells */
+td {
+    padding: 10px;
+}
+
+/* Style the new expense form inputs */
+tfoot input, tfoot select {
+    height: 35px;
+    font-size: 20px;
+    width: 100%; /* Make inputs full width for better layout */
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* Fix the layout of the navigation and main content */
+.d-flex {
+    display: flex;
+}
+
+/* Style the navigation panel */
+.navigation {
+    width: 20vw; /* Set width for the navigation */
+}
+
+/* Style the main content area */
+.main-content {
+    width: 80vw; /* Set width for the main content */
+    padding-left: 5%;
+    max-height: 100vh; /* Ensure content doesn't overflow */
+}
+
+/* Style the search input */
+.search-input {
+    font-size: 25px;
+}
+
+/* Style the add expense button */
+.add-expense {
     background-color: black;
     color: white;
     border-radius: 50px;
     font-size: 20px;
     padding: 10px;
 }
-th{
-    padding: 10px;
-}
-td{
-    padding: 10px;
-}
-
-tbody::before{
-    line-height: 10px;
-}
+.animated-inventory {
+    animation: fadeIn 2s;
+    margin-top: 50px;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
