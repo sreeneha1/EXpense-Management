@@ -1,38 +1,104 @@
-.hz-rule{
-    border: 1px solid #FFFFFF;
-}
-.nav-bg{
-    background-color:#0D0E0D;
-}
-.profile-icon{
-    width:40px;
-    height: 40px;
-    border-radius: 20px;
-    background-color: #C5B3B3;
-    text-align: center;
-    padding-top: 5%;
-
+.nav-bg {
+  background-color: #000; /* Black background color */
+  color: #f5e3d8; /* Nude text color */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
-.title{
-    font-size: 24px;
-    font-weight: bold;
-    font-style: italic;
-    text-align: center;
-    padding-top: 5vh;
+.nav-bg .title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f5e3d8; /* Nude text color for the title */
+  padding: 1rem 1rem 0.5rem 1rem; /* Adjusted padding */
+  text-align: center;
 }
-.nav-links{
-    margin-top: 5%;
-    color: #FFFFFF;
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* Adjusted margin */
+  padding-bottom: 300px;
 }
-.nav-links:hover{
-    
-    font-weight: 400 !important;
+
+.nav-item {
+  text-decoration: none;
+  color: #f5e3d8; /* Nude text color */
+  font-size: 1.2rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: block;
+  padding: 0.5rem 0;
 }
-.nav-item{
-    color: #FFFFFF;
-    text-decoration: none;
+
+.nav-item:hover {
+  color: #d1a684; /* Lighter nude color for hover effect */
+  transform: scale(1.1);
 }
-.nav-item:hover{
-    text-decoration: underline;
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+}
+
+.profile-icon {
+  background-color: #f5e3d8; /* Nude background for profile icon */
+  color: #000; /* Black text color for profile icon */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.profile-name {
+  color: #f5e3d8; /* Nude text color */
+  margin-left: 1rem;
+}
+
+.profile-name::after {
+  content: "";
+  display: block;
+  margin: 5px auto;
+  height: 2px;
+  width: 50%;
+  background-color: #f5e3d8; /* Nude color for horizontal line */
+}
+
+@media (max-width: 768px) {
+  .nav-bg {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-container {
+    justify-content: center;
+  }
+
+  .profile-icon {
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
 }
