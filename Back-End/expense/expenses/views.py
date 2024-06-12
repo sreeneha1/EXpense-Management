@@ -5,7 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from expenses.models import expenses
 from expenses.serializers import ExpenseModelSerilizer
 from rest_framework import status
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, MultiPartParser
 
 
 
@@ -13,7 +13,7 @@ from rest_framework.parsers import JSONParser
 class expenseCRUD(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    parser_classes = [JSONParser]
+    parser_classes = [JSONParser, MultiPartParser]
 
 
     def get(self, request):
