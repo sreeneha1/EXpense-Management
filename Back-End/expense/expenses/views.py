@@ -4,14 +4,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from expenses.models import expenses
 from expenses.serializers import ExpenseModelSerilizer
-import json
 from rest_framework import status
+from rest_framework.parsers import JSONParser, MultiPartParser
+
 
 
 # Create your views here.
 class expenseCRUD(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser]
+
 
     def get(self, request):
         expenses_object = expenses.objects.filter(user = request.user)
@@ -19,7 +22,7 @@ class expenseCRUD(APIView):
         return Response(serialized_obj.data)
 
     def post(self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         description = request_body["description"]
         category = request_body["category"]
         amount = request_body["amount"]
@@ -29,7 +32,7 @@ class expenseCRUD(APIView):
         return Response(ExpenseModelSerilizer(expenses_object).data)
     
     def put(self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         id = request_body["id"]
         description = request_body["description"]
         category = request_body["category"]
@@ -46,7 +49,7 @@ class expenseCRUD(APIView):
         return Response({"message":"unathorized user"},status=status.HTTP_401_UNAUTHORIZED)
 
     def delete (self, request):
-        request_body = json.loads(request.body)
+        request_body = request.data
         id = request_body["id"]
         expenses_object = expenses.objects.get(id=id)
         if expenses_object.user == request.user:
