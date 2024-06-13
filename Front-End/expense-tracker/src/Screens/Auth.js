@@ -39,12 +39,12 @@ function Auth() {
         Inventory and Expense Tracker !       </div>
           <form onSubmit={handelSubmit}>
           <div className='d-flex flex-column'>
-              <label className='labels'>UserName</label>
-              <input type="text" name="username" className='input-login' onChange={(e)=> setUsername(e.target.value)} value={username}/>
+              <label className='labels' id="username-label">UserName</label>
+              <input type="text" name="username" aria-labelledby="username-label" className='input-login' onChange={(e)=> setUsername(e.target.value)} value={username}/>
           </div>
           <div className='d-flex flex-column'>
-              <label className='labels'>Password</label>
-              <input type="password" name="password" className='input-login' onChange={(e)=> setPassword(e.target.value)} value={password}/>
+              <label className='labels' id="password-label">Password</label>
+              <input type="password" name="password" className='input-login' aria-labelledby="password-label" onChange={(e)=> setPassword(e.target.value)} value={password}/>
           </div>
           <div>
               <button type="submit" className='login-button' onClick={handelSubmit}>Log In</button>
