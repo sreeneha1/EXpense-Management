@@ -104,7 +104,7 @@
 .content {
 
   margin-left: 100px; /* Ensure content is not overlapped by navigation */
-  padding: 80px;
+  padding: 30px;
   
   width: calc(100% - 200px);
   overflow-y: auto;
