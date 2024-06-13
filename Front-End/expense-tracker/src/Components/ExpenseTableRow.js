@@ -36,8 +36,9 @@ export default function ExpenseTableRow({
   }
   return (
     <tr style={{ fontSize: "20px", marginTop: "5px" }} id={id}>
+      {console.log(des,editExpenseState.description)}
       <td className="description">
-        {isEdit ? <input type="text" value={editExpenseState.description} onChange={(event)=> setEditExpenseState({...editExpenseState,description:event.target.value})}/> : editExpenseState.description}
+        {isEdit ? <input type="text" value={editExpenseState.description} onChange={(event)=> setEditExpenseState({...editExpenseState,description:event.target.value})}/> : des}
       </td>
       <td className="category">
         {isEdit ? (
@@ -61,14 +62,14 @@ export default function ExpenseTableRow({
             ))}
           </select>
         ) : (
-          expenses_options[editExpenseState.category-1]
+          expenses_options[category-1]
         )}
       </td>
       <td className="date">
-        {isEdit ? <input type="date" value={editExpenseState.date} onChange={(event)=> setEditExpenseState({...editExpenseState,date:event.target.value})}/> : editExpenseState.date}
+        {isEdit ? <input type="date" onChange={(event)=> setEditExpenseState({...editExpenseState,date:event.target.value})} value={editExpenseState.date} /> : date}
       </td>
       <td className="amount">
-        {isEdit ? <input type="number" value={editExpenseState.amount} onChange={(event)=> setEditExpenseState({...editExpenseState,amount:event.target.value})}/> : "$ " + editExpenseState.amount}
+        {isEdit ? <input type="number" value={editExpenseState.amount} onChange={(event)=> setEditExpenseState({...editExpenseState,amount:event.target.value})}/> : "$ " + amount}
       </td>
       <td>
         {isEdit ? (

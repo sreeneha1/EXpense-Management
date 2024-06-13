@@ -38,7 +38,13 @@ function Expense() {
 
 
   useEffect(()=>{
-    setExpenses(unfilteredExpenses.filter((i)=> i.description.includes(searchText)))
+    let filterFunction = (i) => {
+      let present = i.description.toLowerCase().includes(searchText.toLowerCase())
+      if(present){
+        return i
+      }
+    }
+    setExpenses(unfilteredExpenses.filter(filterFunction))
   },[unfilteredExpenses,searchText])
 
   const deleteExpense = (id) => {
@@ -90,15 +96,18 @@ function Expense() {
 
   const editExpense = (expenseState) => {
     console.log(expenseState)
-    unfilteredExpenses.map((i)=>{
+    let intermediateExpensesVar = [...unfilteredExpenses]
+    intermediateExpensesVar.map((i)=>{
       if(i.id == expenseState.id){
         i.description = expenseState.description
         i.category = expenseState.category
         i.amount= expenseState.amount
-        i.date = expenseState.date
+        i.created_at = expenseState.date
       }
       return i
     })
+    
+    setUnfilteredExpenses(intermediateExpensesVar)
     fetch(localhost_backend + "expenses/expense", {
       method: "PUT",
       headers: {
@@ -112,7 +121,6 @@ function Expense() {
   
   return (
     <>
-    {console.log(unfilteredExpenses, expenses)}
       <div className="d-flex">
         <div className="navigation">
           <Navigation />
