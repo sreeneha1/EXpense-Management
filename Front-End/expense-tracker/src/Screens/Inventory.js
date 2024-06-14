@@ -69,7 +69,7 @@ function Inventory() {
 
   const updateProductInApi = async () => {
     try {
-      const response = await updateProduct({ id: editingProduct.id, name, price, qty });
+      const response = await updateProduct(editingProduct.id, { name, price, qty });
       const updatedProducts = products.map((product) =>
           product.id === editingProduct.id ? response : product
       );
@@ -242,7 +242,7 @@ function Inventory() {
                           <td>{row.name}</td>
                           <td>{row.price}</td>
                           <td>{row.qty}</td>
-                          <td>{row.sum}</td>
+                          <td>{row.price * row.qty}</td>
                           <td>
                             <button className="btn btn-primary" onClick={() => startEditingProduct(row)}>
                               Edit
