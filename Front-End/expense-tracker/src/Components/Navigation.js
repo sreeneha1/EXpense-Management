@@ -46,11 +46,11 @@ function Navigation() {
           className="d-flex mt-2 mb-2"
           style={{ paddingLeft: "30px", paddingRight: "30px" }}
         >
-          <div className="profile-icon">IN</div>
+          <div className="profile-icon">{localStorage.getItem("username")[0].toUpperCase()}</div>
           <div
             style={{ textAlign: "center", paddingTop: "5%", width: "110px" }}
           >
-            UserName
+            {localStorage.getItem("username")}
           </div>
         </div>
       </div>

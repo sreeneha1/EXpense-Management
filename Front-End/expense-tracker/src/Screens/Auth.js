@@ -27,6 +27,7 @@ function Auth() {
         }
       })
       .then(response => {
+        localStorage.setItem("username",username)
         localStorage.setItem("authToken",response['access'])
         navigate("/")
     })
