@@ -1,38 +1,56 @@
-.hz-rule{
+.hz-rule {
     border: 1px solid #FFFFFF;
 }
-.nav-bg{
-    background-color:#0D0E0D;
+
+.nav-bg {
+    background-color: #0D0E0D;
 }
-.profile-icon{
-    width:40px;
+
+.profile-icon {
+    width: 40px;
     height: 40px;
     border-radius: 20px;
     background-color: #C5B3B3;
     text-align: center;
     padding-top: 5%;
-
 }
 
-.title{
+.title {
     font-size: 24px;
     font-weight: bold;
     font-style: italic;
     text-align: center;
     padding-top: 5vh;
 }
-.nav-links{
+
+.nav-links {
     margin-top: 5%;
     color: #FFFFFF;
 }
-.nav-links:hover{
-    
+
+.nav-links:hover {
     font-weight: 400 !important;
 }
-.nav-item{
+
+.nav-item {
     color: #FFFFFF;
     text-decoration: none;
 }
-.nav-item:hover{
+
+.nav-item:hover {
     text-decoration: underline;
+}
+
+.logout-button {
+    background-color: #ff4b4b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.logout-button:hover {
+    background-color: #ff1c1c;
 }
