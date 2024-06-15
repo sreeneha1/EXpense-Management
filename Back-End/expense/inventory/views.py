@@ -1,5 +1,4 @@
-from django.http import HttpResponseBadRequest, JsonResponse, HttpResponseNotFound
-from rest_framework.utils import json
+from django.http import HttpResponseBadRequest, JsonResponse, HttpResponseNotFound, Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -47,16 +46,7 @@ class ProductDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def delete(self, request, *args, **kwargs):
-    try:
-        data = json.loads(request.body)
-        product_id = data.get('id')
-        if not product_id:
-            return HttpResponseBadRequest("ID is required for deleting a product")
-        product = Product.objects.get(id=product_id)
+    def delete(self, request, pk):
+        product = self.get_object(pk)
         product.delete()
-        return JsonResponse({'message': 'Product deleted'})
-    except Product.DoesNotExist:
-        return HttpResponseNotFound("Product not found")
-    except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return Response(status=status.HTTP_204_NO_CONTENT)
