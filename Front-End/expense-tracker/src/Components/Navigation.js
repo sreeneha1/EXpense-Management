@@ -39,11 +39,11 @@ function Navigation() {
 
         {username ? (
             <>
-                <div>
+
                 <button onClick={handleLogout} className="logout-button">
                     Logout
                 </button>
-                    </div>
+
                 <div className="profile-container">
                 <div className="profile-icon">{username[0].toUpperCase()}</div>
                 <div className="profile-name">{username}</div>
