@@ -43,7 +43,7 @@ class expenseCRUD(APIView):
             expenses_object.description=description
             expenses_object.category=category
             expenses_object.amount=amount
-            expenses_object.date=date
+            expenses_object.created_at=date
             expenses_object.save()
             return Response(ExpenseModelSerilizer(expenses_object).data)
         return Response({"message":"unathorized user"},status=status.HTTP_401_UNAUTHORIZED)

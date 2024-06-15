@@ -10,14 +10,14 @@ import ExpenseTableRow from "../Components/ExpenseTableRow";
 
 function Expense() {
   let [expenses, setExpenses] = useState([]);
-  let [unfilteredExpenses,setUnfilteredExpenses] = useState([])
+  let [unfilteredExpenses, setUnfilteredExpenses] = useState([]);
   let [newExpense, setNewExpense] = useState({
     description: "",
     category: 1,
     amount: 0,
     date: moment().format("YYYY-MM-DD"),
   });
-  let [searchText,setSearchText] = useState("")
+  let [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetch(localhost_backend + "expenses/expense", {
@@ -26,19 +26,31 @@ function Expense() {
       },
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           return response.json();
         }
       })
       .then((response) => {
-        // setExpenses(response);
-        setUnfilteredExpenses(response)
+        setUnfilteredExpenses(response);
       });
   }, []);
 
-
   useEffect(()=>{
-    setExpenses(unfilteredExpenses.filter((i)=> i.description.includes(searchText)))
+
+    let filterFunction = (i) => {
+
+      let present = i.description.toLowerCase().includes(searchText.toLowerCase())
+
+      if(present){
+
+        return i
+
+      }
+
+    }
+
+    setExpenses(unfilteredExpenses.filter(filterFunction))
+
   },[unfilteredExpenses,searchText])
 
   const deleteExpense = (id) => {
@@ -54,7 +66,7 @@ function Expense() {
       body: data,
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           return response.json();
         }
       })
@@ -62,18 +74,18 @@ function Expense() {
         setUnfilteredExpenses(response);
       });
   };
+
   const addExpense = () => {
     fetch(localhost_backend + "expenses/expense", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
         "content-type": "application/json",
-
       },
       body: JSON.stringify(newExpense),
     })
       .then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           return response.json();
         }
       })
@@ -90,15 +102,31 @@ function Expense() {
 
   const editExpense = (expenseState) => {
     console.log(expenseState)
-    unfilteredExpenses.map((i)=>{
+
+    let intermediateExpensesVar = [...unfilteredExpenses]
+
+    intermediateExpensesVar.map((i)=>{
+
       if(i.id == expenseState.id){
+
         i.description = expenseState.description
+
         i.category = expenseState.category
+
         i.amount= expenseState.amount
-        i.date = expenseState.date
+
+        i.created_at = expenseState.date
+
       }
+
       return i
+
     })
+
+
+
+    setUnfilteredExpenses(intermediateExpensesVar)
+
     fetch(localhost_backend + "expenses/expense", {
       method: "PUT",
       headers: {
@@ -106,42 +134,33 @@ function Expense() {
         "content-type": "application/json",
       },
       body: JSON.stringify(expenseState),
-    })
+    });
   };
 
-  
   return (
     <>
-    {console.log(unfilteredExpenses, expenses)}
       <div className="d-flex">
         <div className="navigation">
           <Navigation />
         </div>
-        <div style={{ maxHeight: "100vh", width: "80vw", paddingLeft: "5%" }}>
-          <div style={{ marginTop: "3%" }}>
+        <div className="main-content">
+          <div className="animated-inventory">
+            <h1><b>EXPENSES</b></h1>
             <div className="d-flex justify-content-end">
-              <div style={{ alignSelf: "center" }}>
+              <div>
                 <input
                   type="search"
-                  style={{ fontSize: "25px" }}
+                  className="search-input"
                   placeholder="Search by description"
-                  onChange={(event) => setSearchText(event.target.value)                  }
+                  onChange={(event) => setSearchText(event.target.value)}
                   value={searchText}
                 />
               </div>
             </div>
             <div>
-              <table
-                style={{ width: "100%", marginTop: "4%", maxHeight: "70vw" }}
-              >
+              <table className="expense-table">
                 <thead>
-                  <tr
-                    style={{
-                      fontSize: "24px",
-                      border: "1px solid black",
-                      backgroundColor: "#ECE1E1",
-                    }}
-                  >
+                  <tr>
                     <th style={{ width: "40%" }}>Expense</th>
                     <th>Category</th>
                     <th style={{ width: "15%" }}>Date</th>
@@ -152,6 +171,7 @@ function Expense() {
                 <tbody id="table_body">
                   {expenses.map((i) => (
                     <ExpenseTableRow
+                      key={i["id"]}
                       id={i["id"]}
                       des={i["description"]}
                       category={i["category"]}
@@ -167,7 +187,6 @@ function Expense() {
                     <td>
                       <input
                         type="text"
-                        style={{ height: "35px", width: "65%" }}
                         onChange={(event) =>
                           setNewExpense({
                             ...newExpense,
@@ -179,20 +198,16 @@ function Expense() {
                     </td>
                     <td>
                       <select
-                        style={{ height: "35px", fontSize: "20px" }}
                         onChange={(event) =>
                           setNewExpense({
                             ...newExpense,
                             category: event.target.value,
                           })
                         }
+                        value={newExpense.category}
                       >
                         {expenses_options.map((val, ind) => (
-                          <option
-                            value={ind + 1}
-                            key={ind + 1}
-                            selected={newExpense.category == ind + 1}
-                          >
+                          <option value={ind + 1} key={ind + 1}>
                             {val}
                           </option>
                         ))}
@@ -202,7 +217,6 @@ function Expense() {
                       <input
                         type="date"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        style={{ height: "35px", fontSize: "20px" }}
                         onChange={(event) =>
                           setNewExpense({
                             ...newExpense,
@@ -215,7 +229,6 @@ function Expense() {
                     <td>
                       <input
                         type="number"
-                        style={{ fontSize: "20px" }}
                         onChange={(event) =>
                           setNewExpense({
                             ...newExpense,
@@ -228,8 +241,9 @@ function Expense() {
                     <td>
                       <img
                         src={check}
-                        style={{ width: "25px", height: "25px" }}
+                        className="add-expense"
                         onClick={addExpense}
+                        alt="Add Expense"
                       />
                     </td>
                   </tr>
