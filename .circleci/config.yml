@@ -3,10 +3,10 @@ version: 2.1
 executors:
   backend-executor:
     docker:
-      - image: circleci/python:3.12.4
+      - image: circleci/python:3.12
   frontend-executor:
     docker:
-      - image: circleci/node:18.16.1
+      - image: circleci/node:18.16
 
 jobs:
   backend:
