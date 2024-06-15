@@ -1,8 +1,9 @@
 import "./App.css";
+import React, { useState, useEffect } from 'react';
 
 import Dashboard from "./Screens/Dashborad";
 import Expense from "./Screens/Expense";
-import Income from "./Screens/Income";
+
 import Auth from "./Screens/Auth";
 import Inventory from "./Screens/Inventory";
 import {
@@ -11,7 +12,7 @@ import {
   Route,
   Navigate,
   Outlet,
-  useNavigate,
+
 } from "react-router-dom";
 
 import Register from "./Screens/Register";
@@ -29,7 +30,7 @@ function App() {
 
     return auth.token ? <Outlet /> : <Navigate to="/login" />;
   };
-
+  
   const AuthenticatedRoutes = () => {
     let auth = { token: false };
     if (
@@ -66,7 +67,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route exact path="/" element={<Dashboard />}></Route>
             <Route exact path="/expense" element={<Expense />}></Route>
-            <Route exact path="/income" element={<Income />}></Route>
+           
             <Route exact path="/inventory" element={<Inventory />}></Route>
           </Route>
 

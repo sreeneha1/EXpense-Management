@@ -29,7 +29,7 @@ export const addProduct = async (newProduct) => {
 
 export const updateProduct = async (id, updatedProduct) => {
     try {
-        const response = await axios.put(`${localhost_backend}inventory/product/${id}`, updatedProduct, {
+        const response = await axios.put(`${localhost_backend}inventory/product/${id}/`, updatedProduct, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
@@ -42,8 +42,7 @@ export const updateProduct = async (id, updatedProduct) => {
 
 export const deleteProduct = async (id) => {
     try {
-        await axios.delete(`${localhost_backend}inventory/products/${id}/`, {
-            data: { id: id },
+        await axios.delete(`${localhost_backend}inventory/product/${id}/`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },

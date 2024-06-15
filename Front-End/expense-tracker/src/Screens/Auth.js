@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import "../styles/auth.css";
 import { localhost_backend } from "../env";
@@ -9,7 +10,6 @@ function Auth() {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState(null);
-
   let handleSubmit = (event) => {
     event.preventDefault();
     let data = JSON.stringify({

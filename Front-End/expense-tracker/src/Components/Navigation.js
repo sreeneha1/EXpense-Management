@@ -22,6 +22,7 @@ function Navigation() {
         ) : (
           <div className="profile-placeholder">Not logged in</div>
         )}
+
       </div>
     </div>
   );
