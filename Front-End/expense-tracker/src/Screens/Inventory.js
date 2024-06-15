@@ -70,10 +70,13 @@ function Inventory() {
 
   const updateProductInApi = async () => {
     try {
-      const response = await updateProduct({ id: editingProduct.id, name, price, qty });
+
+      const response = await updateProduct(editingProduct.id, { name, price, qty });
+
       const updatedProducts = products.map((product) =>
-        product.id === editingProduct.id ? response : product
-      );
+
+          product.id === editingProduct.id ? response : product);
+
       setProducts(updatedProducts);
       resetForm();
     } catch (error) {

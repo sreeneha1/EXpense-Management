@@ -35,11 +35,23 @@ function Expense() {
       });
   }, []);
 
-  useEffect(() => {
-    setExpenses(
-      unfilteredExpenses.filter((i) => i.description.includes(searchText))
-    );
-  }, [unfilteredExpenses, searchText]);
+  useEffect(()=>{
+
+    let filterFunction = (i) => {
+
+      let present = i.description.toLowerCase().includes(searchText.toLowerCase())
+
+      if(present){
+
+        return i
+
+      }
+
+    }
+
+    setExpenses(unfilteredExpenses.filter(filterFunction))
+
+  },[unfilteredExpenses,searchText])
 
   const deleteExpense = (id) => {
     let data = JSON.stringify({
@@ -49,6 +61,7 @@ function Expense() {
       method: "DELETE",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
       },
       body: data,
     })
@@ -67,6 +80,7 @@ function Expense() {
       method: "POST",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
       },
       body: JSON.stringify(newExpense),
     })
@@ -87,20 +101,37 @@ function Expense() {
   };
 
   const editExpense = (expenseState) => {
-    console.log(expenseState);
-    unfilteredExpenses.map((i) => {
-      if (i.id === expenseState.id) {
-        i.description = expenseState.description;
-        i.category = expenseState.category;
-        i.amount = expenseState.amount;
-        i.date = expenseState.date;
+    console.log(expenseState)
+
+    let intermediateExpensesVar = [...unfilteredExpenses]
+
+    intermediateExpensesVar.map((i)=>{
+
+      if(i.id == expenseState.id){
+
+        i.description = expenseState.description
+
+        i.category = expenseState.category
+
+        i.amount= expenseState.amount
+
+        i.created_at = expenseState.date
+
       }
-      return i;
-    });
+
+      return i
+
+    })
+
+
+
+    setUnfilteredExpenses(intermediateExpensesVar)
+
     fetch(localhost_backend + "expenses/expense", {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("authToken"),
+        "content-type": "application/json",
       },
       body: JSON.stringify(expenseState),
     });
