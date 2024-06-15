@@ -33,14 +33,4 @@ class Home(APIView):
 def home_view(request):
     return HttpResponse("Welcome to the Home Page")
 
-class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        try:
-            refresh_token = request.data['refresh_token']
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({'detail': 'Logout successful.'}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
