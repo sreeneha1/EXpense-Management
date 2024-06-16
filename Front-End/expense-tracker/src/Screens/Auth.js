@@ -34,6 +34,7 @@ function Auth() {
         .then(response => {
           localStorage.setItem("username", username);
           localStorage.setItem("authToken", response['access']);
+          localStorage.setItem("refresh",response['refresh'])
           navigate("/");
         })
         .catch(error => {

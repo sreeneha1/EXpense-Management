@@ -25,7 +25,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 20px; /* Adjusted margin */
-  padding-bottom: 600px;
+  height: 80vh;
 }
 
 .nav-item {
@@ -101,4 +101,18 @@
   .title {
     font-size: 1.5rem;
   }
+}
+
+.logout-button {
+  background-color: var(--nude-pink);
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.logout-button:hover {
+  background-color: #ff1c1c;
 }
