@@ -1,7 +1,7 @@
 """
 URL configuration for expense project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The urlpatterns list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
 Examples:
 Function views
@@ -16,14 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
+from userLogin.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('userLogin/',include('userLogin.urls')),
      path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('expenses/' ,include("expenses.urls")),
     path('inventory/', include('inventory.urls')),
+    path('', home_view, name='home'),
+    path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
+
+
 ]

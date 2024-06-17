@@ -1,0 +1,30 @@
+version: '1.0'
+
+
+services:
+
+  frontend:
+    build:
+      context: ./Front-End/expense-tracker
+      dockerfile: Dockerfile
+
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./frontend:/app/frontend
+      - ./frontend:/app/package.json
+
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./Back-End/expense
+      dockerfile: Dockerfile
+
+    ports:
+      - '8000:8000'
+
+    volumes:
+      - ./backend:/app/backend

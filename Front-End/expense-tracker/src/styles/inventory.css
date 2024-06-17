@@ -1,0 +1,111 @@
+*{
+  margin-top: 50px;
+}
+
+
+.inventory-container {
+  display: flex;
+}
+
+.navigation {
+  flex: 0 0 200px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.animated-inventory {
+  animation: fadeIn 2s;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  padding-top: 5px;
+ 
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.card-header {
+  background-color: rgb(255, 216, 159) !important; /* Light nude color for card header */
+  border-bottom: 1px solid #d3d3d3; /* Light border for card header */
+  font-weight: bold;
+  padding-left: 20px; /* Adjust padding-left */
+  padding-top: 10px; /* Adjust padding-top */
+  padding-bottom: 10px; /* Add padding-bottom */
+}
+
+.card-body {
+  background-color: white;
+  padding: 20px; /* Add padding */
+}
+
+.table-bordered td, .table-bordered th {
+  border: 1px solid #d3d3d3; /* Light border for table cells */
+}
+
+.table thead th {
+  background-color: #f4ede9; /* Light nude color for table headers */
+}
+
+.form-control:disabled {
+  background-color: #e9ecef; /* Lighter gray for disabled inputs */
+}
+
+.btn-add {
+  background-color: #f4ede9 !important; /* Nude color for add button */
+  border: 1px solid #f4ede9 !important;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+
+.btn-add:hover {
+  background-color: #f5e3d8 !important; /* Slightly darker nude on hover */
+}
+
+.btn-clear {
+  background-color: #f4ede9 !important; /* Nude color for clear button */
+  border: 1px solid #f5e3d8 !important;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+
+.btn-clear:hover {
+  background-color: #f5e3d8 !important; /* Slightly darker nude on hover */
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background-color: rgb(14, 175, 14) !important;
+  padding-left: 15px;
+  margin-left: 15px;
+}
+
+.btn-danger {
+  background-color: #f53022 !important;
+  padding-left: 10px;
+}
+
+.btn-spacing {
+  margin-right: 10px; /* Adjust the value as needed */
+}
+.content {
+
+  margin-left: 100px; /* Ensure content is not overlapped by navigation */
+  padding: 30px;
+  
+  width: calc(100% - 200px);
+  overflow-y: auto;
+}
