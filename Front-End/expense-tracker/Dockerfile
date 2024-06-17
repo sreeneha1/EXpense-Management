@@ -1,7 +1,9 @@
+# Front-End/expense-tracker/Dockerfile
+
 FROM node:18.20.3
 
-# Set the working directory in the container to /app
-WORKDIR /app/frontend/
+# Set the working directory in the container
+WORKDIR /app
 
 # Copy package.json and package-lock.json from local machine to the container
 COPY ./package*.json ./
@@ -12,13 +14,8 @@ RUN npm install
 # Copy the rest of the application code from local machine to the container
 COPY ./ ./
 
-# Build the application
-#RUN npm run build
+# Expose the port the app runs on
+EXPOSE 3000
 
-# Optionally, if you want to serve the application using a static server, you can add:
-# Install serve globally
-#RUN npm install -g serve
-
-# Command to serve the build files
-#CMD ["serve", "-s", "build"]
+# Command to run the application
 CMD ["npm", "start"]

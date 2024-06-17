@@ -1,7 +1,9 @@
+# Back-End/expense/Dockerfile
+
 FROM python:3.10
 
 RUN apt-get update \
-	&& apt-get install \
+	&& apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app/backend
