@@ -1,0 +1,54 @@
+version: 2.1
+
+executors:
+  backend-executor:
+    docker:
+      - image: tanmayee17/expense-management:backend
+  frontend-executor:
+    docker:
+      - image: tanmayee17/expense-management:frontend
+
+jobs:
+  backend:
+    executor: backend-executor
+    steps:
+      - checkout
+      - run:
+          name: Check Python Version
+          command: python --version
+      - run:
+          name: Setup Backend Environment
+          working_directory: Back-End/expense
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: Test Backend
+          working_directory: Back-End/expense
+          command: |
+            . venv/bin/activate
+            python manage.py test  # Adjust this based on your test framework
+
+  frontend:
+    executor: frontend-executor
+    steps:
+      - checkout
+      - run:
+          name: Check Node.js Version
+          command: node --version
+      - run:
+          name: Setup Frontend Environment
+          working_directory: Front-End/expense-tracker
+          command: npm install
+      - run:
+          name: Test Frontend
+          working_directory: Front-End/expense-tracker
+          command: npm test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - backend
+      - frontend
