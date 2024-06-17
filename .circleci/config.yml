@@ -3,10 +3,10 @@ version: 2.1
 executors:
   backend-executor:
     docker:
-      - image: circleci/python:3.12.14
+      - image: tanmayee17/expense-management:backend
   frontend-executor:
     docker:
-      - image: circleci/node:18
+      - image: tanmayee17/expense-management:frontend
 
 jobs:
   backend:
