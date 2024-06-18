@@ -68,14 +68,16 @@ To get a local copy up and running, follow these steps.
 
 7. Frontend Setup:
     cd Front-End/expense-tracker
-    `npm install`
-    `npm install framer-motion`
-    `npm start`
-##Usage
-- 1) Register: Create a new account.
-- 2) Login: Access your account.
-- 3) Add Expense: Record a new expense by providing the amount, category, and date.
-- 4) Add Inventory Item: Record a new inventory item by providing the name, category, quantity, and price.
-- 5) View Expenses: View a list of all your expenses.
-- 6) View Inventory: View a list of all your inventory items.
-- 7) Generate Reports: View reports to analyze your spending and inventory data.
+-  `npm install`
+-   `npm install framer-motion`
+-    `npm start`
+   
+## Usage
+
+- **Register:** Create a new account.
+- **Login:** Access your account.
+- **Add Expense:** Record a new expense by providing the amount, category, and date.
+- **Add Inventory Item:** Record a new inventory item by providing the name, category, quantity, and price.
+- **View Expenses:** View a list of all your expenses.
+- **View Inventory:** View a list of all your inventory items.
+- **Generate Reports:** View reports to analyze your spending and inventory data.
